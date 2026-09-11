@@ -1,0 +1,24 @@
+{
+    "name": "subarist/waterhole-geoip",
+    "type": "waterhole-extension",
+    "description": "GeoIP country flag support for Waterhole",
+    "license": "MIT",
+    "require": {
+        "waterhole/core": "^0.7.0 || ^0.8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Subarist\\WaterholeGeoIp\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Subarist\\WaterholeGeoIp\\WaterholeGeoIpServiceProvider"
+            ]
+        },
+        "waterhole": {
+            "name": "WaterholeGeoIp"
+        }
+    }
+}
