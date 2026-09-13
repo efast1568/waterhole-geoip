@@ -59,6 +59,21 @@ if (preg_match('#/posts/(\d+)(?:-[^/]+)?$#', $path, $matches)) {
         $countryCode = IpInfo::where('ip_address', $ip)
             ->value('country_code');
 
+        if (! $countryCode) {
+            $geoIpService = app(GeoIpService::class);
+
+            $countryCode = $geoIpService->countryCode($ip);
+
+            if ($countryCode) {
+                $countryCode = strtoupper($countryCode);
+
+                IpInfo::updateOrCreate(
+                    ['ip_address' => $ip],
+                    ['country_code' => $countryCode],
+                );
+            }
+        }
+
         if (! $countryCode || strlen($countryCode) !== 2) {
             return null;
         }

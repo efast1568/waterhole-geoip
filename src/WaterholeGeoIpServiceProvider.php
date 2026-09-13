@@ -8,6 +8,7 @@ use Subarist\WaterholeGeoIp\Services\Providers\IpApiProvider;
 use Subarist\WaterholeGeoIp\Services\Providers\IpInfoProvider;
 use Waterhole\Extend;
 use Waterhole\Models\Comment;
+use Subarist\WaterholeGeoIp\Models\ContentIp;
 use Waterhole\Models\Post;
 
 class WaterholeGeoIpServiceProvider extends Extend\ServiceProvider
@@ -78,6 +79,16 @@ class WaterholeGeoIpServiceProvider extends Extend\ServiceProvider
         $ip = request()->ip();
 
         if ($model->wasRecentlyCreated && $this->isValidPublicIp($ip)) {
+            ContentIp::firstOrCreate(
+                [
+                    'content_type' => $type,
+                    'content_id' => $model->id,
+                ],
+                [
+                    'ip_address' => $ip,
+                ],
+            );
+
             ProcessGeoIp::dispatch(
                 $type,
                 $model->id,
